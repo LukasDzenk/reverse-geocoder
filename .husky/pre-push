@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check current branch
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$CURRENT_BRANCH" != "main" ]; then
+  echo "Husky scripts are only run on the main branch."
+  exit 0
+fi
+
+# Check for test comments
+TEST_COMMENT="!TEST"
+if grep -r "$TEST_COMMENT" --exclude-dir=node_modules --exclude-dir=.husky --exclude-dir=dist --exclude-dir=.git .; then
+  echo "Found test comment in code: $TEST_COMMENT"
+  echo "Aborting commit."
+  exit 1
+fi
+
+# Check for type errors
+yarn build
+TYPE_CHECK_EXIT_CODE=$?
+
+if [ $TYPE_CHECK_EXIT_CODE -eq "0" ]; then
+  echo "TYPE CHECK - SUCCESS"
+else
+  echo "TYPE CHECK - FAILED"
+  echo "Aborting commit."
+  exit 1
+fi
+
+# Run prettier
+yarn run prettierWrite

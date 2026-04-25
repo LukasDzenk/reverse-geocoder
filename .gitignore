@@ -1,0 +1,14 @@
+.env
+node_modules/
+# build files
+dist/
+# error files
+yarn-error.log
+# VS Code files
+.vscode/
+# Test coverage files
+coverage/
+# Misc files
+*.dbf
+*.shp
+*.shx
