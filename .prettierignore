@@ -1,3 +1,5 @@
 dist/
 coverage/
 *.html
+pnpm-lock.yaml
+src/public/docs/api.yaml

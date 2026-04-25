@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
 # Check current branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -18,7 +17,7 @@ if grep -r "$TEST_COMMENT" --exclude-dir=node_modules --exclude-dir=.husky --exc
 fi
 
 # Check for type errors
-yarn build
+pnpm build
 TYPE_CHECK_EXIT_CODE=$?
 
 if [ $TYPE_CHECK_EXIT_CODE -eq "0" ]; then
@@ -30,4 +29,4 @@ else
 fi
 
 # Run prettier
-yarn run prettierWrite
+pnpm run prettierWrite

@@ -1,0 +1,5 @@
+process.env.NODE_ENV = process.env.NODE_ENV ?? 'test'
+process.env.PORT = process.env.PORT ?? '3000'
+process.env.ERROR_LOG_LEVEL = process.env.ERROR_LOG_LEVEL ?? 'error'
+process.env.REQ_RES_LOG_LEVEL = process.env.REQ_RES_LOG_LEVEL ?? 'error'
+process.env.SERVER_INSTANCE_ID = process.env.SERVER_INSTANCE_ID ?? 'test'

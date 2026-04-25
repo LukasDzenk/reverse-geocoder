@@ -12,7 +12,7 @@ export const MapCoordinatesToCityGetRequestSchema = z.object({
     latitude: coordinateLatitudeNumericSchema,
     longitude: coordinateLongitudeNumericSchema,
   }),
-  body: z.object({}),
+  body: z.object({}).optional(),
 })
 
 export type MapCoordinatesToCityGetRequestValidator = ({
