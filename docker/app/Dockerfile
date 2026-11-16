@@ -1,15 +1,16 @@
 # =============================================================================
 # STAGE 1: Build Stage
 # =============================================================================
-FROM public.ecr.aws/docker/library/node:22-alpine AS builder
+FROM public.ecr.aws/docker/library/node:26-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files first for better layer caching
 COPY package.json pnpm-lock.yaml ./
 
-# Set up pnpm via corepack with a shared store dir (cached between stages)
-RUN corepack enable && \
+# Node 25+ images no longer bundle corepack, so install the pnpm version pinned
+# in package.json ("packageManager") directly; shared store dir is cached between stages
+RUN npm install -g pnpm@10.29.3 && \
     mkdir -p /pnpm-store && \
     pnpm config set store-dir /pnpm-store
 
@@ -23,11 +24,11 @@ RUN pnpm build
 # =============================================================================
 # STAGE 2: Production Runtime Stage
 # =============================================================================
-FROM public.ecr.aws/docker/library/node:22-alpine AS runtime
+FROM public.ecr.aws/docker/library/node:26-alpine AS runtime
 
 # dumb-init for proper signal forwarding; non-root user for least privilege
 RUN apk add --no-cache dumb-init && \
-    corepack enable && \
+    npm install -g pnpm@10.29.3 && \
     addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
